@@ -10,7 +10,7 @@ using namespace sf;
 #define Width 600
 #define Height 300
 
-struct 
+struct Position
 {
     int x;
     int y;
@@ -18,6 +18,8 @@ struct
 
 int main(void)
 {
+    Font arial;
+    arial.loadFromFile("arial.ttf");
     RenderWindow window(VideoMode(Width, Height), "Project Game");
     window.setFramerateLimit(60);
                         
