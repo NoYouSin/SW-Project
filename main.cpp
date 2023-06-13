@@ -33,7 +33,7 @@ bool checkCollisionCircle(const sf::CircleShape& player, const sf::CircleShape& 
     sf::Vector2f playerPosition = player.getPosition();
     sf::Vector2f obstaclePosition = obstacle.getPosition();
 
-    // 플레이어와 장애물의 중심점 사이의 거리
+    // 플레이어와 장애물의 중심 사이의 거리
     float distance = std::sqrt(std::pow(playerPosition.x - obstaclePosition.x, 2) + std::pow(playerPosition.y - obstaclePosition.y, 2));
 
     // 플레이어와 장애물의 반지름
@@ -58,7 +58,6 @@ sf::CircleShape spriteToCircle(const sf::Sprite& sprite)
     return circle;
 }
 
-// spritesToCircles 함수 정의
 std::vector<sf::CircleShape> spritesToCircles(const std::vector<sf::Sprite>& sprites) 
 {
     std::vector<sf::CircleShape> circles;
