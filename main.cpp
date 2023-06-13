@@ -19,7 +19,8 @@ struct Position
     int y;
 };
 
-int getRandomNumber(int min, int max) {
+int getRandomNumber(int min, int max) 
+{
     random_device rd;
     mt19937 gen(rd());
     uniform_int_distribution<> distrib(min, max);
@@ -27,23 +28,24 @@ int getRandomNumber(int min, int max) {
 }
 
 
-bool checkCollisionCircle(const sf::CircleShape& player, const sf::CircleShape& obstacle) {
+bool checkCollisionCircle(const sf::CircleShape& player, const sf::CircleShape& obstacle) 
+{
     sf::Vector2f playerPosition = player.getPosition();
     sf::Vector2f obstaclePosition = obstacle.getPosition();
 
-    // 플레이어와 장애물의 중심점 사이의 거리를 계산합니다.
+    // 플레이어와 장애물의 중심점 사이의 거리
     float distance = std::sqrt(std::pow(playerPosition.x - obstaclePosition.x, 2) + std::pow(playerPosition.y - obstaclePosition.y, 2));
 
-    // 플레이어와 장애물의 반지름을 계산합니다.
+    // 플레이어와 장애물의 반지름
     float playerRadius = player.getRadius()/2;
     float obstacleRadius = obstacle.getRadius()/2;
 
-    // 플레이어와 장애물의 중심점 사이의 거리가 플레이어와 장애물의 반지름 합보다 작으면 충돌이 발생한 것으로 간주합니다.
     return distance < playerRadius + (obstacleRadius/4);
 }
 
 // spriteToCircle 함수 정의
-sf::CircleShape spriteToCircle(const sf::Sprite& sprite) {
+sf::CircleShape spriteToCircle(const sf::Sprite& sprite) 
+{
     sf::FloatRect spriteBounds = sprite.getGlobalBounds();
     sf::Vector2f spritePosition = sprite.getPosition();
     float spriteRadius = std::min(spriteBounds.width, spriteBounds.height) / 8.3f;
@@ -56,16 +58,19 @@ sf::CircleShape spriteToCircle(const sf::Sprite& sprite) {
 }
 
 // spritesToCircles 함수 정의
-std::vector<sf::CircleShape> spritesToCircles(const std::vector<sf::Sprite>& sprites) {
+std::vector<sf::CircleShape> spritesToCircles(const std::vector<sf::Sprite>& sprites) 
+{
     std::vector<sf::CircleShape> circles;
     circles.reserve(sprites.size());
 
-    for (const auto& sprite : sprites) {
+    for (const auto& sprite : sprites) 
+    {
         circles.push_back(spriteToCircle(sprite));
     }
 
     return circles;
 }
+
 
 
 int main(void)
@@ -84,10 +89,12 @@ int main(void)
      // 배경 이미지 로드
     const int numBackgrounds = 30; // 배경 이미지 개수
     std::vector<sf::Texture> b(numBackgrounds);
-    for (int i = 0; i < numBackgrounds; ++i) {
+    for (int i = 0; i < numBackgrounds; ++i) 
+    {
         std::stringstream ss;
         ss << "images/b" << (i + 1) << ".png";
-        if (!b[i].loadFromFile(ss.str())) {
+        if (!b[i].loadFromFile(ss.str())) 
+        {
             // 이미지 로드 실패
             std::cerr << "Failed to load background image: " << ss.str() << std::endl;
             return -1;
@@ -97,28 +104,29 @@ int main(void)
     sf::Sprite backgroundSprite(b[0]);
 
     // 배경 이미지 변경을 위한 변수들
-    int currentBackgroundIndex = 0; // 현재 보여지고 있는 배경 이미지 인덱스
-    int currentBackgroundScore = 2; // 현재 보여지고 있는 배경 이미지의 점수
+    int currentBackgroundIndex = 0; // 현재 배경 이미지 인덱스
+    int currentBackgroundScore = 2; // 현재 배경 이미지 점수
 
 
     // ---------------------------------------------------------------------------
     
     // Ground 이미지 로드
     sf::Texture groundTexture;
-    if (!groundTexture.loadFromFile("images/G.png")) {
+    if (!groundTexture.loadFromFile("images/G.png")) 
+    {
         // 이미지 로드 실패
         std::cerr << "Failed to load Ground image!" << std::endl;
         return -1;
     }
 
-    // Ground 스프라이트 생성
+    // Ground 스프라이트
     sf::Sprite groundSprite(groundTexture);
 
-    // Ground 크기 조정
+    // Ground 크기
     float scaleFactor = 2.5f;
     groundSprite.setScale(1.8*scaleFactor, scaleFactor);
 
-    // Ground 위치 설정
+    // Ground 위치
     int windowHeight = window.getSize().y - 17;
     groundSprite.setPosition(-15.f, windowHeight - groundTexture.getSize().y);
 
@@ -126,7 +134,8 @@ int main(void)
 
     // 플레이어
     vector<Texture> textures; // 텍스처를 벡터로 저장
-    for (int i = 1; i <= 8; i++) {
+    for (int i = 1; i <= 8; i++) 
+    {
         Texture texture;
         stringstream ss;
         ss << "images/r" << i << ".png";
@@ -135,10 +144,11 @@ int main(void)
     }
 
     // 스프라이트
-    vector<Sprite> playerFrames; // 스프라이트를 벡터로 저장
-    for (int i = 0; i < textures.size(); i++) {
+    vector<Sprite> playerFrames; 
+    for (int i = 0; i < textures.size(); i++) 
+    {
         Sprite sprite(textures[i]);
-        //sprite.setScale(1.0f, 1.0f); // 크기 조절
+        //sprite.setScale(1.0f, 1.0f);
         playerFrames.push_back(sprite);
     }
 
@@ -148,27 +158,26 @@ int main(void)
     playerPos.x = 100;
     playerPos.y = PLAYER_Y_BOTTOM;
 
-    // 프레임에 따라 이미지 변경을 위한 변수들
-    int index = 0; // 이미지 인덱스
+    int index = 0;
     float frame = 0.f;
     float frameSpeed = 1.0f; // 이미지 변경 속도
-    const int changeCount = 8; // 몇 프레임마다 변경할지 (수정된 부분)
+    const int changeCount = 8; // 몇 프레임마다 변경
 
     // ---------------------------------------------------------------------------
 
-    const int gravity = 5;    //중력. 점프할때 사용
-    bool isJumping = false;    //점프 중인지
-    bool isBottom = true;    //바닥에 발이 닿았는지
+    const int gravity = 5;     
+    bool isJumping = false;     
+    bool isBottom = true;    
 
     // ---------------------------------------------------------------------------
-
-    
 
     vector<Texture> objTextures;
     vector<string> objImages = { "images/s1.png", "images/s2.png", "images/s3.png" };
-    for (const auto& image : objImages) {
+    for (const auto& image : objImages) 
+    {
         Texture texture;
-        if (!texture.loadFromFile(image)) {
+        if (!texture.loadFromFile(image)) 
+        {
             cerr << "Failed to load obj image: " << image << endl;
             return -1;
         }
@@ -176,7 +185,8 @@ int main(void)
     }
 
     vector<Sprite> objs;
-    for (const auto& texture : objTextures) {
+    for (const auto& texture : objTextures) 
+    {
         Sprite obj(texture);
         //obj.setScale(1.0f, 1.0f);
         objs.push_back(obj);
@@ -186,20 +196,19 @@ int main(void)
     const int obstacleHeight = objTextures[0].getSize().y;
 
     vector<Position> objPositions;
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; i++) 
+    {
         Position position;
         position.x = Width + i * getRandomNumber(300, 800);
         position.y = PLAYER_Y_BOTTOM - obstacleHeight;
         objPositions.push_back(position);
     }
 
-
-
     Clock clock;
 
     // ---------------------------------------------------------------------------
 
-    // Score
+    // 점수
     Font font;
     font.loadFromFile("arial.ttf");
 
@@ -212,8 +221,6 @@ int main(void)
     scoreText.setFont(font);
     scoreText.setCharacterSize(30);
     scoreText.setFillColor(Color::Black);
-
-    //Clock clock; // SFML 시계
 
     // ---------------------------------------------------------------------------
 
@@ -304,7 +311,7 @@ int main(void)
 
     // ---------------------------------------------------------------------------
 
-    while (window.isOpen()) // 윈도우가 열렸으면
+    while (window.isOpen()) 
     {
         window.clear();
 
@@ -382,7 +389,7 @@ int main(void)
                 {
                     if (keyReleasedG)
                     {
-                        state = 1; // Move to the next state (end state)
+                        state = 1; 
                         break;
                         keyReleasedG = false;
                     }
@@ -420,11 +427,11 @@ int main(void)
             scoreText.setPosition(570, 250);
             scoreText.setFillColor(Color::Red);
 
-            if (score == 30)
+            if (score == 300)
             {
                 if (40 <= userW && userW <= 49)
                 {
-                    endK = 55; // 값 할당을 위해 단일 등호(=)를 사용
+                    endK = 55; 
                 }
                 else if (50 <= userW && userW <= 59)
                 {
@@ -470,7 +477,6 @@ int main(void)
 
             if (Keyboard::isKeyPressed(Keyboard::S))
             {
-                // 'S' 키를 누르면 게임을 다시 시작합니다.
                 
                 state = 1;
                 score = 0;
@@ -478,7 +484,6 @@ int main(void)
                 playerPos.y = PLAYER_Y_BOTTOM;
                 isBottom = true;
 
-                // 점수 텍스트를 다시 설정합니다.
                 scoreText.setString(to_string(score) + " M");
             }
 
@@ -491,58 +496,63 @@ int main(void)
             window.draw(scoreText);
             scoreText.setCharacterSize(30);
             scoreText.setFillColor(Color::Black);
-            //logic.
-            //jump.
-            if (Keyboard::isKeyPressed(Keyboard::Space)) //스페이스 입력 감지
+
+            //점프 입력
+            if (Keyboard::isKeyPressed(Keyboard::Space)) 
             {
-                if (isBottom && !isJumping)    //바닥이고, 점프중이 아닐때 점프 가능
+                if (isBottom && !isJumping)    
                 {
                     //make jumping stage;
                     isJumping = true;
                     isBottom = false;
                 }
             }
-            // jump(up and down)
+
+            // 점프
             if (isJumping)
             {
-                playerPos.y -= gravity; //점프중일때는 y에서 중력을 뺴줌 그럼 올라감
+                playerPos.y -= gravity; //점프 (중력을 -)
             }
             else
             {
                 playerPos.y += gravity;
             }
-            // jump limit,  bottom limit.
-            if (playerPos.y >= PLAYER_Y_BOTTOM)    //바닥에서 지하로 가지 않도록 설정
+            
+            if (playerPos.y >= PLAYER_Y_BOTTOM)    //점프 최소점
             {
                 playerPos.y = PLAYER_Y_BOTTOM;
                 isBottom = true;
             }
-            if (playerPos.y <= PLAYER_Y_BOTTOM - 100)    //점프해서 우주로 가지 않도록 설정
+            if (playerPos.y <= PLAYER_Y_BOTTOM - 100)    //점프 최대 높이
             {
                 isJumping = false;
             }
+
             // ---------------------------------------------------------------------------
-            // Player step
+            
+            //플레이어 프레임 변경
             frame += frameSpeed;
             if (frame > changeCount)
             {
                 frame -= changeCount;
                 ++index;
-                if (index >= playerFrames.size()) {
+                if (index >= playerFrames.size()) 
+                {
                     index = 0;
                 }
             }
             // ---------------------------------------------------------------------------
+            
             // 함수 선언
             sf::CircleShape spriteToCircle(const sf::Sprite & sprite);
             std::vector<sf::CircleShape> spritesToCircles(const std::vector<sf::Sprite>&sprites);
             bool checkCollisionCircle(const sf::CircleShape & player, const sf::CircleShape & obstacle);
 
+            // ---------------------------------------------------------------------------
 
-            // ...
-
-            // Move objs
-            for (int i = 0; i < objs.size(); i++) {
+            //장애물
+            for (int i = 0; i < objs.size(); i++) 
+            {
                 objs[i].setPosition(objPositions[i].x, objPositions[i].y + 52);
                 objPositions[i].x -= 5;
                 if (score >= 200)
@@ -551,18 +561,16 @@ int main(void)
                 }
                 
 
-                if (objPositions[i].x < -obstacleWidth) {
+                if (objPositions[i].x < -obstacleWidth) 
+                {
                     objPositions[i].x = Width + getRandomNumber(300, 800);
                 }
 
-                // Check collision
-                if (checkCollisionCircle(spriteToCircle(playerFrames[index]), spriteToCircle(objs[i]))) {
-                    // Handle collision (e.g. game over)
+                if (checkCollisionCircle(spriteToCircle(playerFrames[index]), spriteToCircle(objs[i]))) 
+                {
                     state++;
                     cout << "Game over!" << endl;
                     
-
-                    // Remove the obj from the vector
                     objs.erase(objs.begin() + i);
                     objPositions.erase(objPositions.begin() + i);
 
@@ -570,14 +578,11 @@ int main(void)
                 }
             }
 
-            
-            
-
-
             // ---------------------------------------------------------------------------
+            
             // 시간 기반으로 점수 증가
             Time elapsedTime = clock.getElapsedTime();
-            if (elapsedTime.asSeconds() >= 1.0f) // 1초마다 점수 증가
+            if (elapsedTime.asSeconds() >= 1.0f)
             {
                 score += 5; // 점수 증가량 설정
                 clock.restart();
@@ -585,18 +590,16 @@ int main(void)
 
             // ---------------------------------------------------------------------------
 
-            if (score == 30)
+            if (score == 300)
             {
                 state = 3;
-
-                
-
             }
             
             // ---------------------------------------------------------------------------
             
             // 배경 이미지 변경
-            if (score >= currentBackgroundScore) {
+            if (score >= currentBackgroundScore) 
+            {
                 currentBackgroundIndex = (currentBackgroundIndex + 1) % numBackgrounds;
                 currentBackgroundScore += 10;
                 backgroundSprite.setTexture(b[currentBackgroundIndex]);
@@ -604,26 +607,20 @@ int main(void)
 
             // ---------------------------------------------------------------------------
 
-            
-            // Set positions
-            //obj.setPosition(objPos.x, objPos.y);
             playerFrames[index].setPosition(playerPos.x, playerPos.y);
 
-            // Update score text
-            scoreText.setString( to_string(score) + " M" );
-            
+            scoreText.setString( to_string(score) + " M" );            
 
             // ---------------------------------------------------------------------------
-            
-            //draw.
             window.clear(Color::White);
             window.draw(backgroundSprite);
             window.draw(groundSprite);
             window.draw(playerFrames[index]);
-            for (const auto& obj : objs) {
+            for (const auto& obj : objs) 
+            {
                 window.draw(obj);
             }
-            window.draw(scoreText); // 점수 텍스트 출력
+            window.draw(scoreText); 
 
             window.display();
         }
@@ -631,9 +628,9 @@ int main(void)
         window.display();
 
         Event e;
-        while (window.pollEvent(e)) // 윈도우 이벤트를 받는 동안
+        while (window.pollEvent(e))
         {
-            if (e.type == Event::Closed) // 닫기 이벤트를 받으면 윈도우 닫음
+            if (e.type == Event::Closed) 
             {
                 window.close();
             }
