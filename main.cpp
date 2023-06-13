@@ -519,7 +519,7 @@ int main(void)
             scoreText.setCharacterSize(30);
             scoreText.setFillColor(Color::Black);
             //logic.
-            //dino jump.
+            // jump.
             if (Keyboard::isKeyPressed(Keyboard::Space)) //스페이스 입력 감지
             {
                 if (isBottom && !isJumping)    //바닥이고, 점프중이 아닐때 점프 가능
@@ -529,7 +529,7 @@ int main(void)
                     isBottom = false;
                 }
             }
-            //dino jump(up and down)
+            // jump(up and down)
             if (isJumping)
             {
                 playerPos.y -= gravity; //점프중일때는 y에서 중력을 뺴줌 그럼 올라감
@@ -538,7 +538,7 @@ int main(void)
             {
                 playerPos.y += gravity;
             }
-            //dino jump limit, dino bottom limit.
+            // jump limit,  bottom limit.
             if (playerPos.y >= PLAYER_Y_BOTTOM)    //바닥에서 지하로 가지 않도록 설정
             {
                 playerPos.y = PLAYER_Y_BOTTOM;
