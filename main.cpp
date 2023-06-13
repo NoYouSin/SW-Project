@@ -43,7 +43,6 @@ bool checkCollisionCircle(const sf::CircleShape& player, const sf::CircleShape& 
     return distance < playerRadius + (obstacleRadius/4);
 }
 
-// spriteToCircle 함수 정의
 sf::CircleShape spriteToCircle(const sf::Sprite& sprite) 
 {
     sf::FloatRect spriteBounds = sprite.getGlobalBounds();
