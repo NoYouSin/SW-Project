@@ -48,7 +48,8 @@ sf::CircleShape spriteToCircle(const sf::Sprite& sprite)
 {
     sf::FloatRect spriteBounds = sprite.getGlobalBounds();
     sf::Vector2f spritePosition = sprite.getPosition();
-    float spriteRadius = std::min(spriteBounds.width, spriteBounds.height) / 8.35f;
+  
+    float spriteRadius = std::min(spriteBounds.width, spriteBounds.height) / 8.351f;
 
     sf::CircleShape circle(spriteRadius);
     circle.setOrigin(spriteRadius, spriteRadius);
