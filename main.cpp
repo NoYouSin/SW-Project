@@ -67,33 +67,6 @@ std::vector<sf::CircleShape> spritesToCircles(const std::vector<sf::Sprite>& spr
     return circles;
 }
 
-// 클래스 정의
-class Tree {
-public:
-    Sprite sprite;
-    Vector2f velocity;
-    bool visible;
-
-    Tree() : visible(true) {}
-
-    void setPosition(Vector2f position) {
-        sprite.setPosition(position);
-    }
-
-    void setVelocity(Vector2f vel) {
-        velocity = vel;
-    }
-
-    void setScale(Vector2f scale) {
-        sprite.setScale(scale);
-    }
-
-    void setVisible(bool isVisible) {
-        visible = isVisible;
-    }
-};
-
-
 
 int main(void)
 {
@@ -189,35 +162,35 @@ int main(void)
 
     // ---------------------------------------------------------------------------
 
+    
 
-
-    vector<Texture> treeTextures;
-    vector<string> treeImages = { "images/s1.png", "images/s2.png", "images/s3.png" };
-    for (const auto& image : treeImages) {
+    vector<Texture> objTextures;
+    vector<string> objImages = { "images/s1.png", "images/s2.png", "images/s3.png" };
+    for (const auto& image : objImages) {
         Texture texture;
         if (!texture.loadFromFile(image)) {
-            cerr << "Failed to load tree image: " << image << endl;
+            cerr << "Failed to load obj image: " << image << endl;
             return -1;
         }
-        treeTextures.push_back(texture);
+        objTextures.push_back(texture);
     }
 
-    vector<Sprite> trees;
-    for (const auto& texture : treeTextures) {
-        Sprite tree(texture);
-        //tree.setScale(1.0f, 1.0f);
-        trees.push_back(tree);
+    vector<Sprite> objs;
+    for (const auto& texture : objTextures) {
+        Sprite obj(texture);
+        //obj.setScale(1.0f, 1.0f);
+        objs.push_back(obj);
     }
 
-    const int obstacleWidth = treeTextures[0].getSize().x * 0.3f;
-    const int obstacleHeight = treeTextures[0].getSize().y;
+    const int obstacleWidth = objTextures[0].getSize().x * 0.3f;
+    const int obstacleHeight = objTextures[0].getSize().y;
 
-    vector<Position> treePositions;
+    vector<Position> objPositions;
     for (int i = 0; i < 10; i++) {
         Position position;
         position.x = Width + i * getRandomNumber(300, 800);
         position.y = PLAYER_Y_BOTTOM - obstacleHeight;
-        treePositions.push_back(position);
+        objPositions.push_back(position);
     }
 
 
@@ -519,7 +492,7 @@ int main(void)
             scoreText.setCharacterSize(30);
             scoreText.setFillColor(Color::Black);
             //logic.
-            // jump.
+            //jump.
             if (Keyboard::isKeyPressed(Keyboard::Space)) //스페이스 입력 감지
             {
                 if (isBottom && !isJumping)    //바닥이고, 점프중이 아닐때 점프 가능
@@ -568,29 +541,30 @@ int main(void)
 
             // ...
 
-            // Move trees
-            for (int i = 0; i < trees.size(); i++) {
-                trees[i].setPosition(treePositions[i].x, treePositions[i].y + 52);
-                treePositions[i].x -= 5;
+            // Move objs
+            for (int i = 0; i < objs.size(); i++) {
+                objs[i].setPosition(objPositions[i].x, objPositions[i].y + 52);
+                objPositions[i].x -= 5;
                 if (score >= 200)
                 {
-                    treePositions[i].x -= 6;
+                    objPositions[i].x -= 6;
                 }
                 
 
-                if (treePositions[i].x < -obstacleWidth) {
-                    treePositions[i].x = Width + getRandomNumber(300, 800);
+                if (objPositions[i].x < -obstacleWidth) {
+                    objPositions[i].x = Width + getRandomNumber(300, 800);
                 }
 
                 // Check collision
-                if (checkCollisionCircle(spriteToCircle(playerFrames[index]), spriteToCircle(trees[i]))) {
+                if (checkCollisionCircle(spriteToCircle(playerFrames[index]), spriteToCircle(objs[i]))) {
                     // Handle collision (e.g. game over)
                     state++;
                     cout << "Game over!" << endl;
                     
-                    // Remove the tree from the vector
-                    trees.erase(trees.begin() + i);
-                    treePositions.erase(treePositions.begin() + i);
+
+                    // Remove the obj from the vector
+                    objs.erase(objs.begin() + i);
+                    objPositions.erase(objPositions.begin() + i);
 
 
                 }
@@ -632,7 +606,7 @@ int main(void)
 
             
             // Set positions
-            //tree.setPosition(treePos.x, treePos.y);
+            //obj.setPosition(objPos.x, objPos.y);
             playerFrames[index].setPosition(playerPos.x, playerPos.y);
 
             // Update score text
@@ -646,8 +620,8 @@ int main(void)
             window.draw(backgroundSprite);
             window.draw(groundSprite);
             window.draw(playerFrames[index]);
-            for (const auto& tree : trees) {
-                window.draw(tree);
+            for (const auto& obj : objs) {
+                window.draw(obj);
             }
             window.draw(scoreText); // 점수 텍스트 출력
 
