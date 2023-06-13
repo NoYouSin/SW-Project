@@ -58,7 +58,6 @@ sf::CircleShape spriteToCircle(const sf::Sprite& sprite)
     return circle;
 }
 
-// spritesToCircles 함수 정의
 std::vector<sf::CircleShape> spritesToCircles(const std::vector<sf::Sprite>& sprites) 
 {
     std::vector<sf::CircleShape> circles;
