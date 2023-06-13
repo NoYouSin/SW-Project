@@ -68,7 +68,6 @@ std::vector<sf::CircleShape> spritesToCircles(const std::vector<sf::Sprite>& spr
 }
 
 
-
 int main(void)
 {
     // SFML 윈도우
@@ -562,6 +561,7 @@ int main(void)
                     state++;
                     cout << "Game over!" << endl;
                     
+
                     // Remove the obj from the vector
                     objs.erase(objs.begin() + i);
                     objPositions.erase(objPositions.begin() + i);
