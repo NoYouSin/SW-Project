@@ -85,8 +85,8 @@ int main(void)
 
     // ---------------------------------------------------------------------------
     
-     // 배경 이미지 로드
-    const int numBackgrounds = 30; // 배경 이미지 개수
+     // 배경 이미지
+    const int numBackgrounds = 30; // 이미지 개수
     std::vector<sf::Texture> b(numBackgrounds);
     for (int i = 0; i < numBackgrounds; ++i) 
     {
@@ -94,7 +94,6 @@ int main(void)
         ss << "images/b" << (i + 1) << ".png";
         if (!b[i].loadFromFile(ss.str())) 
         {
-            // 이미지 로드 실패
             std::cerr << "Failed to load background image: " << ss.str() << std::endl;
             return -1;
         }
@@ -102,37 +101,32 @@ int main(void)
 
     sf::Sprite backgroundSprite(b[0]);
 
-    // 배경 이미지 변경을 위한 변수들
     int currentBackgroundIndex = 0; // 현재 배경 이미지 인덱스
     int currentBackgroundScore = 2; // 현재 배경 이미지 점수
 
 
     // ---------------------------------------------------------------------------
     
-    // Ground 이미지 로드
+    // Ground 이미지
     sf::Texture groundTexture;
     if (!groundTexture.loadFromFile("images/G.png")) 
     {
-        // 이미지 로드 실패
         std::cerr << "Failed to load Ground image!" << std::endl;
         return -1;
     }
 
-    // Ground 스프라이트
     sf::Sprite groundSprite(groundTexture);
 
-    // Ground 크기
     float scaleFactor = 2.5f;
     groundSprite.setScale(1.8*scaleFactor, scaleFactor);
 
-    // Ground 위치
     int windowHeight = window.getSize().y - 17;
     groundSprite.setPosition(-15.f, windowHeight - groundTexture.getSize().y);
 
     // ---------------------------------------------------------------------------
 
     // 플레이어
-    vector<Texture> textures; // 텍스처를 벡터로 저장
+    vector<Texture> textures;
     for (int i = 1; i <= 8; i++) 
     {
         Texture texture;
@@ -142,7 +136,6 @@ int main(void)
         textures.push_back(texture);
     }
 
-    // 스프라이트
     vector<Sprite> playerFrames; 
     for (int i = 0; i < textures.size(); i++) 
     {
